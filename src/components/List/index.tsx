@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
 import Item from './Item';
 import style from  './List.module.scss';
-import { Itask } from '../../types/Itask';
+import { useTask } from '../../contexts/taskContext';
 
+function List() {
 
-interface Props {
-  tasks: Itask[];
-  selectTask: (taskselected: Itask) => void;
-}
+  const { tasks, selectTask } = useTask();
 
-function List({tasks, selectTask} : Props) {
   return(
     <aside className={style.TasksList}>
         <h2>
@@ -18,8 +15,8 @@ function List({tasks, selectTask} : Props) {
         <ul>
           {tasks.map((task) => (
             <Item 
+            key={task.id}
               selectTask={selectTask}
-              key={task.id}
               {...task}
             />
           ))}

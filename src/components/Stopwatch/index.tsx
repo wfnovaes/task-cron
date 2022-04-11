@@ -1,20 +1,15 @@
 import { useEffect, useState } from "react";
 import { timeToSeconds } from "../../common/utils/date";
-import { Itask } from "../../types/Itask";
+import { useTask } from "../../contexts/taskContext";
 import Button from "../Button";
 import style from "./Stopwatch.module.scss";
 import Timer from "./Timer";
 
-
-interface Props {
-  taskSelected: Itask | undefined;
-  finishTask: () => void;
-}
-
-export default function Stopwatch({taskSelected, finishTask}: Props) {
+export default function Stopwatch() {
 
   const [time, setTime] = useState<number>();
-  
+  const { taskSelected, completeTask } = useTask();
+
   useEffect(() => {
     if (taskSelected?.time) setTime(timeToSeconds(taskSelected.time));
   }, [taskSelected]);  
@@ -25,8 +20,8 @@ export default function Stopwatch({taskSelected, finishTask}: Props) {
         counter --;
         setTime(counter);
         regressive(counter)
-      } else finishTask()
-    }, 1000)
+      } else completeTask()
+    }, 1000);
   }
 
   return ( 

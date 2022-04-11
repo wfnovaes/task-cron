@@ -1,30 +1,27 @@
-import Reac, { useState} from 'react';
-import { Itask } from '../../types/Itask';
+import { useState} from 'react';
 import Button from '../Button';
 import style from "./Form.module.scss";
 import { v4 as uuidv4 } from "uuid";
-
-interface Props {
-  setTasks: React.Dispatch<React.SetStateAction<Itask[]>>;
-}
+import { useTask } from '../../contexts/taskContext';
+import React from 'react';
 
 
-export default function Form({setTasks} : Props) {
+export default function Form() {
 
   const [name, setName] = useState<string>("");
   const [time, setTime] = useState<string>("00:00")
 
-  function addTask(event: React.FormEvent) {
+  const { addTask, tasks }  = useTask();
+
+  function handleAddTask(event: React.FormEvent) {
     event.preventDefault(); 
-    setTasks(oldTasks => {
-      return [...oldTasks, {
-        name,
-        time,
-        selected: false,
-        completed: false,
-        id: uuidv4()
-      }];    
-    })
+    addTask({
+      name,
+      time,
+      selected: false,
+      completed: false,
+      id: uuidv4()
+    })    
     resetState();
   }
 
@@ -34,7 +31,7 @@ export default function Form({setTasks} : Props) {
   }
 
   return (
-    <form action="" className={style.newTask} onSubmit={addTask}>
+    <form action="" className={style.newTask} onSubmit={handleAddTask}>
         <div className={style.inputContainer}>
           <label htmlFor="task">Add a new task</label>
           <input 
